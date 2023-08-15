@@ -3,9 +3,10 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: [
-      "fakestoreapi.com",
+      process.env.NEXT_PUBLIC_DOMAIN,
       "flowbite.s3.amazonaws.com",
       "tailwindui.com",
+      "tecdn.b-cdn.net",
     ],
     // remotePatterns: [
     //   {

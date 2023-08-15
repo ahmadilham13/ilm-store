@@ -5,14 +5,19 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 export default function ProductSection() {
-  // console.log(getAllCategories());
-  // all products
+  // set format price
+  const formatter = new Intl.NumberFormat("rupiah", {
+    style: "currency",
+    currency: "IDR",
+  });
+
+  // all product
   const [product, setProduct] = useState([]);
   useEffect(() => {
     const getProducts = async () => {
       getAllProducts().then(function (result) {
         const { data: res } = result;
-        setProduct(res);
+        setProduct(res.data);
       });
     };
     getProducts();
@@ -24,23 +29,23 @@ export default function ProductSection() {
     const getCategories = async () => {
       getAllCategories().then(function (result) {
         const { data: res } = result;
-        setCategory(res);
+        setCategory(res.data);
       });
     };
     getCategories();
-  });
+  }, []);
 
   // event select category
   const chooseCategory = (e) => {
-    if (e.target.value == "") {
+    if (e.target.value === "") {
       getAllProducts().then(function (result) {
         const { data: res } = result;
-        setProduct(res);
+        setProduct(res.data);
       });
     } else {
       getProductByCat(e.target.value).then(function (result) {
         const { data: res } = result;
-        setProduct(res);
+        setProduct(res.data);
       });
     }
   };
@@ -59,8 +64,8 @@ export default function ProductSection() {
               <option value="">All</option>
               {category.map((value, index) => {
                 return (
-                  <option key={index} value={value}>
-                    {value}
+                  <option key={index} value={value.slug}>
+                    {value.title}
                   </option>
                 );
               })}
@@ -90,7 +95,7 @@ export default function ProductSection() {
               >
                 <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md lg:aspect-none group-hover:opacity-75 lg:h-80">
                   <Image
-                    src={value.image}
+                    src={`${process.env.NEXT_PUBLIC_BACKEND_URL_IMAGE}${value.image}`}
                     alt="Front of men&#039;s Basic Tee in black."
                     className="w-full h-full mb-5 object-center lg:h-auto lg:w-auto"
                     width={300}
@@ -111,12 +116,12 @@ export default function ProductSection() {
                     </p>
                   </div>
                   <p className="text-sm font-medium text-gray-900 dark:text-white">
-                    ${value.price}
+                    {formatter.format(value.price)}
                   </p>
                 </div>
                 <div className="grid">
                   <Link
-                    href={`/products/${value.id}`}
+                    href={`/products/${value.slug}`}
                     className="text-center mt-3 mb-3 bg-gray-700 py-3 px-3 rounded-md dark:hover:bg-gray-500"
                   >
                     Details

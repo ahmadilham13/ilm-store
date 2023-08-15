@@ -1,13 +1,23 @@
-import api from ".";
+import { api } from ".";
+import { getToken } from "./auth";
+import { getCookie } from "cookies-next";
 
 const ENDPOINT = {
-  PRODUCT: "products",
   CATEGORY: "categories",
 };
 
 const getAllCategories = async () => {
   try {
-    const response = await api.get(`${ENDPOINT.PRODUCT}/${ENDPOINT.CATEGORY}`);
+    // for check token
+    getToken();
+
+    const url = `${ENDPOINT.CATEGORY}`;
+    const response = await api.get(url, {
+      headers: {
+        Authorization:
+          "Bearer " + getCookie(process.env.NEXT_PUBLIC_COOKIE_TOKEN),
+      },
+    });
     return response;
   } catch (err) {
     throw Error(err);
