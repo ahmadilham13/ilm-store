@@ -49,9 +49,13 @@ const checkAccessToken = async (token) => {
 const getToken = async () => {
   const token = getCookie(process.env.NEXT_PUBLIC_COOKIE_TOKEN);
 
-  const newToken = checkAccessToken(token);
-
-  return newToken;
+  if (!token) {
+    const setNewToken = getAccessToken();
+    return setNewToken;
+  } else {
+    const newToken = checkAccessToken(token);
+    return newToken;
+  }
 };
 
 export { getAccessToken, getToken };
