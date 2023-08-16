@@ -1,6 +1,5 @@
 import { api } from ".";
-import { getToken } from "./auth";
-import { getCookie } from "cookies-next";
+import { getAccessToken } from "./auth";
 
 const ENDPOINT = {
   CATEGORY: "categories",
@@ -8,17 +7,17 @@ const ENDPOINT = {
 
 const getAllCategories = async () => {
   try {
-    // for check token
-    getToken();
-
-    const url = `${ENDPOINT.CATEGORY}`;
-    const response = await api.get(url, {
-      headers: {
-        Authorization:
-          "Bearer " + getCookie(process.env.NEXT_PUBLIC_COOKIE_TOKEN),
-      },
+    const results = getAccessToken().then(function (token) {
+      const url = `${ENDPOINT.CATEGORY}`;
+      const response = api.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      return response;
     });
-    return response;
+
+    return results;
   } catch (err) {
     throw Error(err);
   }

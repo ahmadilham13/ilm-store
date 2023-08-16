@@ -100,6 +100,7 @@ export default function ProductSection() {
                     className="w-full h-full mb-5 object-center lg:h-auto lg:w-auto"
                     width={300}
                     height={300}
+                    priority={true}
                   />
                 </div>
                 <div className="flex justify-between">

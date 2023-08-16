@@ -1,6 +1,5 @@
 import { api } from ".";
-import { getToken } from "./auth";
-import { getCookie } from "cookies-next";
+import { getAccessToken } from "./auth";
 
 const ENDPOINT = {
   PRODUCTS: "products",
@@ -10,17 +9,17 @@ const ENDPOINT = {
 
 const getAllProducts = async () => {
   try {
-    // for check token
-    getToken();
-
-    const url = `${ENDPOINT.PRODUCTS}`;
-    const response = await api.get(url, {
-      headers: {
-        Authorization:
-          "Bearer " + getCookie(process.env.NEXT_PUBLIC_COOKIE_TOKEN),
-      },
+    const results = getAccessToken().then(function (token) {
+      const url = `${ENDPOINT.PRODUCTS}`;
+      const response = api.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      return response;
     });
-    return response;
+
+    return results;
   } catch (err) {
     throw Error(err);
   }
@@ -37,17 +36,17 @@ const getProduct = async (id) => {
 
 const getProductByCat = async (cat) => {
   try {
-    // for check token
-    getToken();
-
-    const url = `${ENDPOINT.PRODUCT}/${ENDPOINT.CATEGORY}/${cat}`;
-    const response = await api.get(url, {
-      headers: {
-        Authorization:
-          "Bearer " + getCookie(process.env.NEXT_PUBLIC_COOKIE_TOKEN),
-      },
+    const results = getAccessToken().then(function (token) {
+      const url = `${ENDPOINT.PRODUCT}/${ENDPOINT.CATEGORY}/${cat}`;
+      const response = api.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      return response;
     });
-    return response;
+
+    return results;
   } catch (err) {
     throw Error(err);
   }
