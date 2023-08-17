@@ -7,10 +7,10 @@ const ENDPOINT = {
   CATEGORY: "category",
 };
 
-const getAllProducts = async () => {
+const getAllProducts = async (perpage = 10) => {
   try {
     const results = getAccessToken().then(function (token) {
-      const url = `${ENDPOINT.PRODUCTS}`;
+      const url = `${ENDPOINT.PRODUCTS}?perpage=${perpage}`;
       const response = api.get(url, {
         headers: {
           Authorization: "Bearer " + token,
@@ -34,10 +34,10 @@ const getProduct = async (id) => {
   }
 };
 
-const getProductByCat = async (cat) => {
+const getProductByCat = async (cat, perpage = 10) => {
   try {
     const results = getAccessToken().then(function (token) {
-      const url = `${ENDPOINT.PRODUCT}/${ENDPOINT.CATEGORY}/${cat}`;
+      const url = `${ENDPOINT.PRODUCT}/${ENDPOINT.CATEGORY}/${cat}?perpage=${perpage}`;
       const response = api.get(url, {
         headers: {
           Authorization: "Bearer " + token,
