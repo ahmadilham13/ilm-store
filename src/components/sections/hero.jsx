@@ -28,6 +28,7 @@ export default function Hero() {
         <div className="lg:mt-0 lg:col-span-5 lg:flex order-first lg:order-last">
           <Image
             src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/hero/phone-mockup.png"
+            className="w-auto h-auto"
             alt="mockup"
             width={500}
             height={500}

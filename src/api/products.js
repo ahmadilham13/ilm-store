@@ -4,6 +4,7 @@ import { getAccessToken } from "./auth";
 const ENDPOINT = {
   PRODUCTS: "products",
   PRODUCT: "product",
+  SLUG: "slug",
   CATEGORY: "category",
 };
 
@@ -25,10 +26,19 @@ const getAllProducts = async (perpage = 10) => {
   }
 };
 
-const getProduct = async (id) => {
+const getProduct = async (slug) => {
   try {
-    const response = await api.get(`${ENDPOINT.PRODUCT}/${parseInt(id)}`);
-    return response;
+    const results = getAccessToken().then(function (token) {
+      const url = `${ENDPOINT.PRODUCT}/${ENDPOINT.SLUG}/${slug}`;
+      const response = api.get(url, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      });
+      return response;
+    });
+
+    return results;
   } catch (err) {
     throw Error(err);
   }

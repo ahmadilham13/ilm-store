@@ -1,17 +1,25 @@
 import Image from "next/image";
 
 export default function DetailProduct(data) {
-  const product = data.data.data;
+  // set format price
+  const formatter = new Intl.NumberFormat("rupiah", {
+    style: "currency",
+    currency: "IDR",
+  });
+  // define product data
+  const product = data.data.data.data;
+  console.log(product);
   return (
     <section>
       <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
         <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg">
           <Image
-            src={product.image}
+            src={`${process.env.NEXT_PUBLIC_BACKEND_URL_IMAGE}${product.image}`}
             alt="Model wearing plain white basic tee."
             className="h-full w-full object-cover object-center"
             width={300}
             height={300}
+            priority={true}
           />
         </div>
       </div>
@@ -20,11 +28,16 @@ export default function DetailProduct(data) {
           <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">
             {product.title}
           </h1>
+          <div>
+            <h2 className="font-bold tracking-tight text-gray-900">
+              Category: {product.category}
+            </h2>
+          </div>
         </div>
         <div className="mt-4 lg:row-span-3 lg:mt-0">
           <h2 className="sr-only">Product information</h2>
           <p className="text-3xl tracking-tight text-gray-900">
-            ${product.price}
+            {formatter.format(product.price)}
           </p>
           <div className="mt-6">
             <h3 className="sr-only">Reviews</h3>
@@ -96,7 +109,7 @@ export default function DetailProduct(data) {
                 href="#"
                 className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500"
               >
-                {product.rating.count} reviews
+                {/* {product.rating.count} reviews */}
               </a>
             </div>
           </div>
@@ -325,44 +338,44 @@ export default function DetailProduct(data) {
             </div>
           </div>
           {/* <div className="mt-10">
-            <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+          <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
 
-            <div className="mt-4">
-              <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                <li className="text-gray-400">
-                  <span className="text-gray-600">
-                    Hand cut and sewn locally
-                  </span>
-                </li>
-                <li className="text-gray-400">
-                  <span className="text-gray-600">
-                    Dyed with our proprietary colors
-                  </span>
-                </li>
-                <li className="text-gray-400">
-                  <span className="text-gray-600">
-                    Pre-washed &amp; pre-shrunk
-                  </span>
-                </li>
-                <li className="text-gray-400">
-                  <span className="text-gray-600">Ultra-soft 100% cotton</span>
-                </li>
-              </ul>
-            </div>
+          <div className="mt-4">
+            <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+              <li className="text-gray-400">
+                <span className="text-gray-600">
+                  Hand cut and sewn locally
+                </span>
+              </li>
+              <li className="text-gray-400">
+                <span className="text-gray-600">
+                  Dyed with our proprietary colors
+                </span>
+              </li>
+              <li className="text-gray-400">
+                <span className="text-gray-600">
+                  Pre-washed &amp; pre-shrunk
+                </span>
+              </li>
+              <li className="text-gray-400">
+                <span className="text-gray-600">Ultra-soft 100% cotton</span>
+              </li>
+            </ul>
           </div>
+        </div>
 
-          <div className="mt-10">
-            <h2 className="text-sm font-medium text-gray-900">Details</h2>
+        <div className="mt-10">
+          <h2 className="text-sm font-medium text-gray-900">Details</h2>
 
-            <div className="mt-4 space-y-6">
-              <p className="text-sm text-gray-600">
-                The 6-Pack includes two black, two white, and two heather gray
-                Basic Tees. Sign up for our subscription service and be the
-                first to get new, exciting colors, like our upcoming
-                &quot;Charcoal Gray&quot; limited release.
-              </p>
-            </div>
-          </div> */}
+          <div className="mt-4 space-y-6">
+            <p className="text-sm text-gray-600">
+              The 6-Pack includes two black, two white, and two heather gray
+              Basic Tees. Sign up for our subscription service and be the
+              first to get new, exciting colors, like our upcoming
+              &quot;Charcoal Gray&quot; limited release.
+            </p>
+          </div>
+        </div> */}
         </div>
       </div>
     </section>
