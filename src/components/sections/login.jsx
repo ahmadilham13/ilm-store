@@ -1,7 +1,49 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
+import { useState } from "react";
 
 export default function LoginSection() {
+  // style in form
+  const [isTranslateEmail, setTranslateEmail] = useState(false);
+  const [isTranslatePassword, setTranslatePassword] = useState(false);
+
+  // email input event
+  function changeEmailInput(e) {
+    if (e.target.value != "") {
+      setTranslateEmail(true);
+    } else {
+      setTranslateEmail(false);
+    }
+  }
+
+  // password input event
+  function changePasswordInput(e) {
+    if (e.target.value != "") {
+      setTranslatePassword(true);
+    } else {
+      setTranslatePassword(false);
+    }
+  }
+
+  // validation form
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("Email or Username is Required"),
+    password: Yup.string().required("Password is Required"),
+  });
+
+  const formOptions = { resolver: yupResolver(validationSchema) };
+
+  // get function to build form with useform() hook
+  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { errors } = formState;
+
+  // onsubmit event
+  function onSubmit(data) {
+    console.log(data);
+  }
   return (
     <section className="bg-gray-800 mx-auto rounded-md max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-10 lg:m-auto">
       <div className="h-full">
@@ -13,12 +55,13 @@ export default function LoginSection() {
               width={500}
               height={500}
               alt="login-image"
+              priority={true}
             />
           </div>
 
           {/* Right column container */}
           <div className="mb-12 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div className="flex flex-row items-center justify-center lg:justify-start">
                 <p className="mb-0 mr-4 text-lg">Sign in with</p>
 
@@ -83,13 +126,24 @@ export default function LoginSection() {
                   className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                   id="exampleFormControlInput2"
                   placeholder="Email address"
+                  {...register("email")}
+                  onChange={(e) => {
+                    changeEmailInput(e);
+                  }}
                 />
                 <label
                   htmlFor="exampleFormControlInput2"
-                  className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                  className={`${
+                    isTranslateEmail ? "-translate-y-[1.15rem]" : ""
+                  } pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary`}
                 >
                   Email address
                 </label>
+                {/* error alert start */}
+                <div className="invalid-feedback text-red-500 text-sm">
+                  {errors.email?.message}
+                </div>
+                {/* error alert end */}
               </div>
 
               <div className="relative mb-6" data-te-input-wrapper-init>
@@ -98,13 +152,24 @@ export default function LoginSection() {
                   className="peer block min-h-[auto] w-full rounded border-0 bg-transparent px-3 py-[0.32rem] leading-[2.15] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
                   id="exampleFormControlInput22"
                   placeholder="Password"
+                  {...register("password")}
+                  onChange={(e) => {
+                    changePasswordInput(e);
+                  }}
                 />
                 <label
                   htmlFor="exampleFormControlInput22"
-                  className="pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary"
+                  className={`${
+                    isTranslatePassword ? "-translate-y-[1.15rem]" : ""
+                  } pointer-events-none absolute left-3 top-0 mb-0 max-w-[90%] origin-[0_0] truncate pt-[0.37rem] leading-[2.15] text-neutral-500 transition-all duration-200 ease-out peer-focus:-translate-y-[1.15rem] peer-focus:scale-[0.8] peer-focus:text-primary peer-data-[te-input-state-active]:-translate-y-[1.15rem] peer-data-[te-input-state-active]:scale-[0.8] motion-reduce:transition-none dark:text-neutral-200 dark:peer-focus:text-primary`}
                 >
                   Password
                 </label>
+                {/* error alert start */}
+                <div className="invalid-feedback text-red-500 text-sm">
+                  {errors.password?.message}
+                </div>
+                {/* error alert end */}
               </div>
 
               <div className="mb-6 flex items-center justify-between">
@@ -114,6 +179,7 @@ export default function LoginSection() {
                     type="checkbox"
                     value=""
                     id="exampleCheck2"
+                    {...register("remember_me")}
                   />
                   <label
                     className="inline-block pl-[0.15rem] hover:cursor-pointer"
@@ -129,7 +195,7 @@ export default function LoginSection() {
 
               <div className="text-center mt-5 lg:text-left">
                 <button
-                  type="button"
+                  type="submit"
                   className="inline-block rounded bg-primary px-7 pb-2.5 pt-3 text-sm font-medium uppercase leading-normal text-white shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-gray-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:bg-primary-600 focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] focus:outline-none focus:ring-0 active:bg-primary-700 active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)] dark:shadow-[0_4px_9px_-4px_rgba(59,113,202,0.5)] dark:hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:focus:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)] dark:active:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.2),0_4px_18px_0_rgba(59,113,202,0.1)]"
                   data-te-ripple-init
                   data-te-ripple-color="light"
