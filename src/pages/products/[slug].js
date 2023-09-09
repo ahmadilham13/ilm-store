@@ -16,18 +16,12 @@ export default function ProductDetail(data) {
 
 export async function getStaticPaths() {
   const products = await getAllProducts();
-  // console.log(products);
-  const dataProducts = await products;
-  const paths = [
-    {
-      params: { slug: "fdfdf" },
-    },
-  ];
-  // const paths = dataProducts.map((value) => {
-  //   return {
-  //     params: { slug: "testing" },
-  //   };
-  // });
+
+  const paths = products.data.data.data.map((value) => {
+    return {
+      params: {slug: value.slug}
+    }
+  })
 
   return { paths, fallback: "blocking" };
 }
