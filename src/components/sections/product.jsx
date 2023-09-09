@@ -3,6 +3,7 @@ import { getAllProducts } from "@/api/products";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import LoadingSceleton from "./loadingSceleton";
 
 export default function ProductSection() {
   
@@ -16,15 +17,17 @@ export default function ProductSection() {
   // all products
   const [product, setProduct] = useState([]);
   const [category, setCategory] = useState([]);
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
 
   // get all products
   useEffect(() => {
     const getProducts = async () => {
       getAllProducts().then(function(result) {
         const {data: res} = result
-        setProduct(res.data.data)
-        setLoading(false)
+        setInterval(() => {
+          setLoading(false)
+          setProduct(res.data.data)
+        }, 1000);
       })
     }
     getProducts()
@@ -93,13 +96,10 @@ export default function ProductSection() {
             </label>
           </div>
         </div>
-        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {isLoading && (
-            <p className="text-black">Loading...</p>
-          )}
-          {product == "" && (
-            <p className="text-black">Product are empty</p>
-          )}
+            <LoadingSceleton />
+           )}
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           {product.map((value, index) => {
             return (
               <div
