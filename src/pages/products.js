@@ -7,11 +7,11 @@ import axios from "axios";
 import { withIronSessionSsr } from "iron-session/next";
 
 
-export default function Product(data) {
+export default function Product() {
   return (
     <Layout>
       <BreadCrumbs />
-      <ProductSection apiData={data}/>
+      <ProductSection/>
     </Layout>
   );
 }
@@ -32,15 +32,10 @@ export const getServerSideProps = withIronSessionSsr(
       }
       await req.session.save()
     }
-
-    // get All product and categories
-    const products = await getAllProducts();
-    const categories = await getAllCategories()
     
     return {
       props: {
-        products: products.data.data,
-        categories: categories.data.data
+        token: req.session.user.token,
       },
     };
   },
