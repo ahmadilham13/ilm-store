@@ -35,9 +35,6 @@ export default function ProductSection() {
 
   // get all categories
   useEffect(() => {
-    if(isLoading) {
-      return
-    }
       const getCategories = async () => {
         getAllCategories().then(function(results) {
           const {data: res} = results
