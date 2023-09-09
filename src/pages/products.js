@@ -13,19 +13,6 @@ export default function Product(data) {
   );
 }
 
-export const getStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: {
-          name: 'next.js',
-        },
-      }, // See the "paths" section below
-    ],
-    fallback: true, // false or "blocking"
-  }
-}
-
 export async function getStaticProps({params}) {
   const products = await getAllProducts();
   const categories = await getAllCategories()
