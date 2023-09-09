@@ -1,71 +1,53 @@
-import { getAllCategories } from "@/api/categories";
-import { getAllProducts, getProductByCat } from "@/api/products";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-export default function ProductSection() {
+export default function ProductSection(data) {
+  const products = data.apiData.products.data
+  const categories = data.apiData.categories.data
+  // console.log(categories)
   // set format price
   const formatter = new Intl.NumberFormat("rupiah", {
     style: "currency",
     currency: "IDR",
   });
 
-  // all product
-  const [product, setProduct] = useState([]);
-  useEffect(() => {
-    const getProducts = async () => {
-      getAllProducts().then(function (result) {
-        const { data: res } = result;
-        setProduct(res.data);
-      });
-    };
-    getProducts();
-  }, []);
+  // all products
+  const [product, setProduct] = useState(products);
+  const [category, setCategory] = useState(categories);
+  const [isLoading, setLoading] = useState(false)
 
-  // all categories
-  const [category, setCategory] = useState([]);
-  useEffect(() => {
-    const getCategories = async () => {
-      getAllCategories().then(function (result) {
-        const { data: res } = result;
-        setCategory(res.data);
-      });
-    };
-    getCategories();
-  }, []);
+  // get all products
+  // useEffect(() => {
+  //   const getProducts = async () => {
+  //     getAllProducts().then(function(result) {
+  //       const {data: res} = result
+  //       setProduct(res.data.data)
+  //       setLoading(false)
+  //     })
+  //   }
+  //   getProducts()
+  // }, [])
 
-  // event select category
+  // get all categories
+  // useEffect(() => {
+  //   if(isLoading) {
+  //     return
+  //   }
+  //     const getCategories = async () => {
+  //       getAllCategories().then(function(results) {
+  //         const {data: res} = results
+  //         setCategory(res.data.data)
+  //       })
+  //     }
+  //     getCategories()
+  //   }, [ref])
+
+  // get specific product by category
   const chooseCategory = (e) => {
     const sortPerpage = document.getElementById("sortData").value;
-    if (e.target.value === "") {
-      getAllProducts(sortPerpage).then(function (result) {
-        const { data: res } = result;
-        setProduct(res.data);
-      });
-    } else {
-      getProductByCat(e.target.value, sortPerpage).then(function (result) {
-        const { data: res } = result;
-        setProduct(res.data);
-      });
-    }
-  };
-
-  // event sort data product
-  const sortProductData = (e) => {
-    const category = document.getElementById("category").value;
-    if (category) {
-      getProductByCat(category, e.target.value).then(function (result) {
-        const { data: res } = result;
-        setProduct(res.data);
-      });
-    } else {
-      getAllProducts(e.target.value).then(function (result) {
-        const { data: res } = result;
-        setProduct(res.data);
-      });
-    }
-  };
+    console.log(sortPerpage)
+  }
 
   return (
     <div className="bg-white mt-5">
@@ -111,6 +93,12 @@ export default function ProductSection() {
           </div>
         </div>
         <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {isLoading && (
+            <p className="text-black">Loading...</p>
+          )}
+          {product == "" && (
+            <p className="text-black">Product are empty</p>
+          )}
           {product.map((value, index) => {
             return (
               <div
@@ -163,3 +151,13 @@ export default function ProductSection() {
     </div>
   );
 }
+
+// export async function getStaticPaths({req}) {
+//   const products = await getAllProducts()
+
+//   return {
+//     props: {
+//       products: products.data.data
+//     }
+//   }
+// }

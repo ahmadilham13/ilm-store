@@ -1,5 +1,7 @@
-import { api } from ".";
+// import { api } from ".";
+import { api } from "@/utils/api";
 import { getAccessToken } from "./auth";
+import axios from "axios";
 
 const ENDPOINT = {
   PRODUCTS: "products",
@@ -10,21 +12,14 @@ const ENDPOINT = {
 
 const getAllProducts = async (perpage = 10) => {
   try {
-    const results = getAccessToken().then(function (token) {
-      const url = `${ENDPOINT.PRODUCTS}?perpage=${perpage}`;
-      const response = api.get(url, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      return response;
-    });
-
-    return results;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APP_URL}api/${process.env.NEXT_PUBLIC_API_VERSION}/${ENDPOINT.PRODUCTS}`).then(function(results) {
+      return results;
+    })
+    return response
   } catch (err) {
-    throw Error(err);
+    throw Error(err)
   }
-};
+}
 
 const getProduct = async (slug) => {
   try {
