@@ -1,11 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function ProductSection(data) {
   const products = data.apiData.products.data
   const categories = data.apiData.categories.data
-  // console.log(categories)
+  
   // set format price
   const formatter = new Intl.NumberFormat("rupiah", {
     style: "currency",
@@ -16,32 +16,6 @@ export default function ProductSection(data) {
   const [product, setProduct] = useState(products);
   const [category, setCategory] = useState(categories);
   const [isLoading, setLoading] = useState(false)
-
-  // get all products
-  // useEffect(() => {
-  //   const getProducts = async () => {
-  //     getAllProducts().then(function(result) {
-  //       const {data: res} = result
-  //       setProduct(res.data.data)
-  //       setLoading(false)
-  //     })
-  //   }
-  //   getProducts()
-  // }, [])
-
-  // get all categories
-  // useEffect(() => {
-  //   if(isLoading) {
-  //     return
-  //   }
-  //     const getCategories = async () => {
-  //       getAllCategories().then(function(results) {
-  //         const {data: res} = results
-  //         setCategory(res.data.data)
-  //       })
-  //     }
-  //     getCategories()
-  //   }, [ref])
 
   // get specific product by category
   const chooseCategory = (e) => {
@@ -151,13 +125,3 @@ export default function ProductSection(data) {
     </div>
   );
 }
-
-// export async function getStaticPaths({req}) {
-//   const products = await getAllProducts()
-
-//   return {
-//     props: {
-//       products: products.data.data
-//     }
-//   }
-// }
