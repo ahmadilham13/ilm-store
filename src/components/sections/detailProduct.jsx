@@ -7,7 +7,7 @@ export default function DetailProduct(data) {
     currency: "IDR",
   });
   // define product data
-  const product = data.data.data.data;
+  const product = data.data;
   return (
     <section>
       <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">

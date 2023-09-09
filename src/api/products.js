@@ -1,5 +1,5 @@
 // import { api } from ".";
-import { api } from "@/utils/api";
+import { apiCustom } from "@/utils/api";
 import { getAccessToken } from "./auth";
 import axios from "axios";
 
@@ -23,17 +23,11 @@ const getAllProducts = async (perpage = 10) => {
 
 const getProduct = async (slug) => {
   try {
-    const results = getAccessToken().then(function (token) {
-      const url = `${ENDPOINT.PRODUCT}/${ENDPOINT.SLUG}/${slug}`;
-      const response = api.get(url, {
-        headers: {
-          Authorization: "Bearer " + token,
-        },
-      });
-      return response;
-    });
-
-    return results;
+    const response = await axios.get(`${process.env.NEXT_PUBLIC_APP_URL}api/${process.env.NEXT_PUBLIC_API_VERSION}/${ENDPOINT.PRODUCT}`, {params: {slug: slug}}).then(function(results) {
+      return results
+    }) 
+    
+    return response;
   } catch (err) {
     throw Error(err);
   }

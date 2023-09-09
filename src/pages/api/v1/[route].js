@@ -6,11 +6,26 @@ import { NextRequest, NextResponse } from "next/server";
 
 export default withIronSessionApiRoute( async function handler(req, res) {
     const query = req.query
-    const {route, perpage} = query
+    
+    const {route, perpage, slug, page} = query
+
 
     switch (req.method) {
         case 'GET':
             try {
+                
+                // set params
+                const params = {}
+                if(slug) {
+                    params['slug'] = slug
+                }
+                if(perpage) {
+                    params['perpage'] = perpage
+                }
+                if(page) {
+                    params['page'] = page
+                }
+
                 const session = await getIronSession(req, NextResponse.next(), {
                     cookieName: process.env.NEXT_PUBLIC_COOKIE_KEY,
                     password: process.env.NEXT_PUBLIC_COOKIE_PASSWORD,
@@ -21,7 +36,6 @@ export default withIronSessionApiRoute( async function handler(req, res) {
                 })
 
                 const { user } = session
-                console.log(user)
                 
                 var bearer = user?.token;
 
@@ -44,7 +58,8 @@ export default withIronSessionApiRoute( async function handler(req, res) {
                 const response = await api.get(`api/${route}`, {
                     headers: {
                         Authorization: `Bearer ${bearer}`
-                    }
+                    },
+                    params: params
                 })
 
                 res.status(200).json({ message: 'SUCCESS', data: JSON.parse(JSON.stringify(response.data)) })
@@ -71,4 +86,11 @@ export default withIronSessionApiRoute( async function handler(req, res) {
       secure: process.env.NODE_ENV === "production",
     },
 }
-  )
+)
+
+function toObject(arr) {
+    var rv = {};
+    for (var i = 0; i < arr.length; ++i)
+      if (arr[i] !== undefined) rv[i] = arr[i];
+    return rv;
+}
