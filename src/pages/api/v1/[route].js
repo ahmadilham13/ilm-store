@@ -7,7 +7,7 @@ import { NextRequest, NextResponse } from "next/server";
 export default withIronSessionApiRoute( async function handler(req, res) {
     const query = req.query
     
-    const {route, perpage, slug, page} = query
+    const {route, perpage, slug, page, category} = query
 
 
     switch (req.method) {
@@ -24,6 +24,9 @@ export default withIronSessionApiRoute( async function handler(req, res) {
                 }
                 if(page) {
                     params['page'] = page
+                }
+                if(category) {
+                    params['category'] = category
                 }
 
                 const session = await getIronSession(req, NextResponse.next(), {
@@ -87,10 +90,3 @@ export default withIronSessionApiRoute( async function handler(req, res) {
     },
 }
 )
-
-function toObject(arr) {
-    var rv = {};
-    for (var i = 0; i < arr.length; ++i)
-      if (arr[i] !== undefined) rv[i] = arr[i];
-    return rv;
-}

@@ -1,5 +1,5 @@
 import { getAllCategories } from "@/api/categories";
-import { getAllProducts } from "@/api/products";
+import { getAllProducts, getProductByCat } from "@/api/products";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -24,7 +24,7 @@ export default function ProductSection() {
     const getProducts = async () => {
       getAllProducts().then(function(result) {
         const {data: res} = result
-        setInterval(() => {
+        setTimeout(() => {
           setLoading(false)
           setProduct(res.data.data)
         }, 1000);
@@ -46,8 +46,44 @@ export default function ProductSection() {
 
   // get specific product by category
   const chooseCategory = (e) => {
-    const sortPerpage = document.getElementById("sortData").value;
-    console.log(sortPerpage)
+    const category = e.target.value;
+    const sortData = document.getElementById('sortData').value
+    
+    setLoading(true)
+    setProduct([])
+
+    if(category != "") {
+      getProductByCat(category, sortData).then(function(results) {
+        const {data: res} = results
+        setTimeout(() => {
+          setProduct(res.data.data)
+          setLoading(false)
+        }, 1000);
+      })
+    } else {
+      getAllProducts(sortData).then(function(results) {
+        const {data: res} = results
+        setTimeout(() => {
+          setProduct(res.data.data)
+          setLoading(false)
+        }, 1000);
+      })
+    }
+  }
+
+  // sort product
+  const sortProductData = (e) => {
+    const sortData = e.target.value
+
+    setLoading(true)
+    setProduct([])
+    getAllProducts(sortData).then(function(results) {
+      const {data: res} = results
+      setTimeout(() => {
+        setProduct(res.data.data)
+        setLoading(false)
+      }, 1000);
+    })
   }
 
   return (
