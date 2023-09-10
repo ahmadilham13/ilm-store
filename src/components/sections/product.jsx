@@ -53,7 +53,7 @@ export default function ProductSection() {
     setProduct([])
 
     if(categoryChoosed == "") {
-      getAllProducts(sortData).then(function(results) {
+      getAllProducts(perPage).then(function(results) {
         const {data: res} = results
         setTimeout(() => {
           setProduct(res.data.data)
