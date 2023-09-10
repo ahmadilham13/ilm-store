@@ -44,16 +44,16 @@ export default function ProductSection() {
       getCategories()
     }, [])
 
-  // get specific product by category
-  const chooseCategory = (e) => {
-    const category = e.target.value;
-    const sortData = document.getElementById('sortData').value
+  // sort product
+  const sortDataProduct = () => {
+    const perPage = document.getElementById('sortData').value
+    const categoryChoosed = document.getElementById('category').value
     
     setLoading(true)
     setProduct([])
 
-    if(category != "") {
-      getProductByCat(category, sortData).then(function(results) {
+    if(categoryChoosed == "") {
+      getAllProducts(sortData).then(function(results) {
         const {data: res} = results
         setTimeout(() => {
           setProduct(res.data.data)
@@ -61,7 +61,7 @@ export default function ProductSection() {
         }, 1000);
       })
     } else {
-      getAllProducts(sortData).then(function(results) {
+      getProductByCat(categoryChoosed, perPage).then(function(results) {
         const {data: res} = results
         setTimeout(() => {
           setProduct(res.data.data)
@@ -71,21 +71,6 @@ export default function ProductSection() {
     }
   }
 
-  // sort product
-  const sortProductData = (e) => {
-    const sortData = e.target.value
-
-    setLoading(true)
-    setProduct([])
-    getAllProducts(sortData).then(function(results) {
-      const {data: res} = results
-      setTimeout(() => {
-        setProduct(res.data.data)
-        setLoading(false)
-      }, 1000);
-    })
-  }
-
   return (
     <div className="bg-white mt-5">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
@@ -93,7 +78,7 @@ export default function ProductSection() {
           <div className="text-black relative h-10 w-72 min-w-[200px]">
             <select
               onChange={(e) => {
-                chooseCategory(e);
+                sortDataProduct();
               }}
               className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-gray-800 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
               id="category"
@@ -114,7 +99,7 @@ export default function ProductSection() {
           <div className="text-black relative h-10 w-25 min-w-[200px]">
             <select
               onChange={(e) => {
-                sortProductData(e);
+                sortDataProduct();
               }}
               className="peer h-full w-full rounded-[7px] border border-blue-gray-200 border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-blue-gray-200 placeholder-shown:border-t-blue-gray-200 empty:!bg-red-500 focus:border-2 focus:border-gray-800 focus:border-t-transparent focus:outline-0 disabled:border-0 disabled:bg-blue-gray-50"
               id="sortData"
