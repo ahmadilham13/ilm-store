@@ -2,38 +2,48 @@ import { getAllProducts, getProduct } from "@/api/products";
 import Layout from "@/components/layouts";
 import BreadCrumbs from "@/components/sections/breadcrumbs";
 import DetailProduct from "@/components/sections/detailProduct";
-
-export default function ProductDetail(data) {
-  // const productDetail = data.data.data.data 
+export default function ProductDetail({data}) {
+  const productDetail = data
   
   return (
     <Layout>
       <BreadCrumbs />
-      {/* <DetailProduct data={productDetail} /> */}
+      <DetailProduct productData={productDetail} />
     </Layout>
   );
 }
 
-// export async function getStaticPaths() {
-//   const products = await getAllProducts();
+export async function getStaticPaths() {
+  // const products = await getAllProducts();
 
-//   const paths = products.data.data.data.map((value) => {
-//     return {
-//       params: {slug: value.slug}
-//     }
-//   })
+  if(process.env.SKIP_BUILD_STATIC_GENERATION) {
+    return {
+      paths: [],
+      fallback: 'blocking',
+    }
+  }
 
-//   return { paths, fallback: "blocking" };
-// }
+  const products = await getAllProducts();
 
-// export async function getStaticProps({ params }) {
-//   const productSlug = params.slug;
-//   const selectedProduct = await getProduct(productSlug);
+  const paths = products.data.data.data.map((value) => {
+    return {
+      params: {slug: value.slug}
+    }
+  })
 
-//   return {
-//     props: {
-//       data: selectedProduct.data,
-//     },
-//     revalidate: 10,
-//   };
-// }
+  return { paths, fallback: false };
+}
+
+export async function getStaticProps({ params }) {
+  console.log(params.slug)
+  // console.log(params)
+  const productSlug = params.slug;
+  const selectedProduct = await getProduct(productSlug);
+  const productData = JSON.parse(JSON.stringify(selectedProduct.data.data.data))
+  return {
+    props: {
+      data: productData,
+    },
+    revalidate: 10,
+  };
+}

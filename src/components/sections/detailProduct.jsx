@@ -1,13 +1,13 @@
 import Image from "next/image";
 
-export default function DetailProduct(data) {
+export default function DetailProduct({productData}) {
   // set format price
   const formatter = new Intl.NumberFormat("rupiah", {
     style: "currency",
     currency: "IDR",
   });
   // define product data
-  const product = data.data;
+  const product = productData;
   return (
     <section>
       <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:gap-x-8 lg:px-8">
