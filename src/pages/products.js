@@ -42,6 +42,7 @@ export const getServerSideProps = withIronSessionSsr(
   {
     cookieName: process.env.NEXT_PUBLIC_COOKIE_KEY,
     password: process.env.NEXT_PUBLIC_COOKIE_PASSWORD,
+    ttl: process.env.NEXT_PUBLIC_COOKIE_EXPIRED,
     // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
     cookieOptions: {
       secure: process.env.NODE_ENV === "production",

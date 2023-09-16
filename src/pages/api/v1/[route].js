@@ -32,6 +32,7 @@ export default withIronSessionApiRoute( async function handler(req, res) {
                 const session = await getIronSession(req, NextResponse.next(), {
                     cookieName: process.env.NEXT_PUBLIC_COOKIE_KEY,
                     password: process.env.NEXT_PUBLIC_COOKIE_PASSWORD,
+                    ttl: process.env.NEXT_PUBLIC_COOKIE_EXPIRED,
                     // secure: true should be used in production (HTTPS) but can't be used in development (HTTP)
                     cookieOptions: {
                         secure: process.env.NODE_ENV === "production",
@@ -64,6 +65,13 @@ export default withIronSessionApiRoute( async function handler(req, res) {
                     },
                     params: params
                 })
+
+                if(response.data.refresh_token != false) {
+                    req.session.user = {
+                        token: response.data.refresh_token
+                    }
+                    await req.session.save()
+                }
 
                 res.status(200).json({ message: 'SUCCESS', data: JSON.parse(JSON.stringify(response.data)) })
             } catch (err) {
