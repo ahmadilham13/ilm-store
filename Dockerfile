@@ -1,0 +1,22 @@
+FROM node:16-alpine
+
+WORKDIR /app
+
+COPY package* .
+RUN npm i
+
+# ARG NEXT_PUBLIC_APP_URL=http://localhost:3000/
+# ARG NEXT_PUBLIC_API_VERSION=v1
+# ARG NEXT_PUBLIC_DOMAIN=ilm-api.ahmadilm.com
+# ARG NEXT_PUBLIC_BACKEND_URL_IMAGE=https://ilm-api.ahmadilm.com/images/products/
+# ARG NEXT_PUBLIC_BACKEND_URL=https://ilm-api.ahmadilm.com/
+# ARG NEXT_PUBLIC_USERNAME=ahmadilm_
+# ARG NEXT_PUBLIC_PASSWORD=12345678
+# ARG NEXT_PUBLIC_COOKIE_KEY=ilmToken
+# ARG NEXT_PUBLIC_COOKIE_PASSWORD=Xc9uQLioBMQRpK6FTq2TT3fGlE0t3ndy
+# ARG SKIP_BUILD_STATIC_GENERATION=true
+# ARG NEXT_PUBLIC_COOKIE_EXPIRED=3600
+
+COPY . .
+
+CMD [ "npm", "run", "dev" ]
